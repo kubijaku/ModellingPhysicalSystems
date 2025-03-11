@@ -4,7 +4,7 @@ jobs:
     test: 
         runs-on: ubuntu-latest
         steps: 
-            - run: pip install nbconvert
+            - run: pip install nbconvert ipykernel
             - run: sudo apt-get install pandoc inkscape texlive-xetex
             - uses: actions/checkout@v4
             - run: python -m nbconvert --to pdf --execute lab1/lab1.ipynb
