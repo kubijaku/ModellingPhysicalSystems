@@ -7,4 +7,4 @@ jobs:
             - run: pip install nbconvert
             - run: sudo apt-get install pandoc inkscape texlive-xetex
             - uses: actions/checkout@v4
-            - run: python -m nbconvert lab1/lab1.ipynb
+            - run: python -m nbconvert --to pdf lab1/lab1.ipynb
