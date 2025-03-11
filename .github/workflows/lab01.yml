@@ -8,3 +8,6 @@ jobs:
             - run: sudo apt-get install pandoc inkscape texlive-xetex
             - uses: actions/checkout@v4
             - run: python -m nbconvert --to pdf lab1/lab1.ipynb
+            - uses: actions/upload-artifact@v4
+              with:
+                path: lab1/lab1.pdf
