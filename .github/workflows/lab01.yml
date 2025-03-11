@@ -24,16 +24,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 🔒 Cache APT packages
-      - name: Cache APT packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            /var/cache/apt
-            /var/lib/apt/lists
-          key: apt-cache-${{ runner.os }}-lab01
-          restore-keys: |
-            apt-cache-${{ runner.os }}-
 
       # 🔒 Cache pip packages
       - name: Cache pip
