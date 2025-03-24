@@ -1,0 +1,30 @@
+name: lab02
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pip packages
+        run: |
+          pip install --upgrade pip
+          pip install nbconvert ipykernel pint matplotlib scipy open-atmos-jupyter-utils
+
+      - name: Install APT packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc inkscape texlive-xetex
+
+      - name: Execute and convert notebook to PDF
+        run: |
+          python -m nbconvert --to pdf --execute lab3/lab3.ipynb
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: lab3/lab3.pdf
