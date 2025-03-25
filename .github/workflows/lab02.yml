@@ -1,6 +1,9 @@
 name: lab02
 
-on: [push]
+on:
+  push:
+    paths:
+      - lab2/**
 
 jobs:
   test:
