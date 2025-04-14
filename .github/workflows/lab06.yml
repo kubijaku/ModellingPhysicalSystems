@@ -16,7 +16,7 @@ jobs:
       - name: Install pip packages
         run: |
           pip install --upgrade pip
-          pip install nbconvert ipykernel pint matplotlib scipy open-atmos-jupyter-utils
+          pip install nbconvert ipykernel pint matplotlib scipy open-atmos-jupyter-utils nbqa pylint
 
       - name: Install APT packages
         run: |
@@ -31,3 +31,20 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: lab6/lab6.pdf
+      
+      - name: Check nbqa pylint result
+        run: |      
+          # Run pylint and capture output
+          SCORE=$(nbqa pylint lab6/lab6.ipynb --score=y --exit-zero | tee pylint_output.txt | grep "Your code has been rated at" | sed -E 's/.* ([0-9\.]+)\/10.*/\1/')
+      
+          echo "Pylint score: $SCORE"
+      
+          # Convert score to integer percentage and compare
+          SCORE_INT=$(echo "$SCORE * 10" | bc | cut -d'.' -f1)
+      
+          if [ "$SCORE_INT" -lt 80 ]; then
+            echo "❌ Linting failed: score below 80%"
+            exit 1
+          else
+            echo "✅ Linting passed"
+          fi
