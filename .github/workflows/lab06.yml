@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - lab6/**
+      - .github/workflows/lab06.yml
 
 jobs:
   generatePDF:
