@@ -1,0 +1,51 @@
+name: lab07
+
+on:
+  push:
+    paths:
+      - lab7/**
+      - .github/workflows/lab07.yml
+
+jobs:
+  generatePDF:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pip packages
+        run: |
+          pip install --upgrade pip
+          pip install nbconvert ipykernel pint matplotlib scipy open-atmos-jupyter-utils nbqa pylint
+
+      - name: Install APT packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc inkscape texlive-xetex
+
+      - name: Execute and convert notebook to PDF
+        run: |
+          python -m nbconvert --to pdf --execute lab7/lab7.ipynb
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: lab7/lab7.pdf
+      
+      - name: Check nbqa pylint result
+        run: |      
+          # Run pylint and capture output
+          SCORE=$(nbqa pylint lab7/lab7.ipynb --score=y --exit-zero | tee pylint_output.txt | grep "Your code has been rated at" | sed -E 's/.* ([0-9\.]+)\/10.*/\1/')
+      
+          echo "Pylint score: $SCORE"
+      
+          # Convert score to integer percentage and compare
+          SCORE_INT=$(echo "$SCORE * 10" | bc | cut -d'.' -f1)
+      
+          if [ "$SCORE_INT" -lt 80 ]; then
+            echo "❌ Linting failed: score below 80%"
+            exit 1
+          else
+            echo "✅ Linting passed"
+          fi
