@@ -1,10 +1,10 @@
-name: lab07
+name: lab08
 
 on:
   push:
     paths:
-      - lab7/**
-      - .github/workflows/lab07.yml
+      - lab8/**
+      - .github/workflows/lab08.yml
 
 jobs:
   generatePDF:
@@ -26,17 +26,17 @@ jobs:
 
       - name: Execute and convert notebook to PDF
         run: |
-          python -m nbconvert --to pdf --execute lab7/lab7.ipynb
+          python -m nbconvert --to pdf --execute lab8/lab8.ipynb
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          path: lab7/lab7.pdf
+          path: lab8/lab8.pdf
       
       - name: Check nbqa pylint result
         run: |      
           # Run pylint and capture output
-          SCORE=$(nbqa pylint lab7/lab7.ipynb --score=y --exit-zero | tee pylint_output.txt | grep "Your code has been rated at" | sed -E 's/.* ([0-9\.]+)\/10.*/\1/')
+          SCORE=$(nbqa pylint lab8/lab8.ipynb --score=y --exit-zero | tee pylint_output.txt | grep "Your code has been rated at" | sed -E 's/.* ([0-9\.]+)\/10.*/\1/')
       
           echo "Pylint score: $SCORE"
       
